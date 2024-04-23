@@ -4,7 +4,6 @@ import pandas as pd
 def calculate_demographic_data(print_data=True):
     # Read data from file
     df = pd.read_csv("adult.data.csv")
-    print(df)
 
     # How many of each race are represented in this dataset? This should be a Pandas series with race names as the index labels.
     race_count = df.race.value_counts()
@@ -24,7 +23,6 @@ def calculate_demographic_data(print_data=True):
 
     # percentage with salary >50K
     he_rich_no = higher_education.loc[higher_education['salary'] == ">50K"]
-    print(len(he_rich_no))
     higher_education_rich = round(len(he_rich_no) / len(higher_education) * 100, 1)
     lw_rich_no = lower_education.loc[lower_education['salary'] == ">50K"]
     lower_education_rich = round(len(lw_rich_no) / len(lower_education) * 100, 1)
@@ -60,7 +58,16 @@ def calculate_demographic_data(print_data=True):
 
 
     # Identify the most popular occupation for those who earn >50K in India.
+    india_occupations = df.loc[(df["native-country"] == "India") & (df["salary"] == ">50K")].groupby(["occupation"]).count()["age"]
+    no_top_IN_occupation = 0
     top_IN_occupation = None
+    for row in india_occupations.index:
+        if (india_occupations.loc[row] > no_top_IN_occupation):
+            top_IN_occupation = row
+            no_top_IN_occupation = india_occupations.loc[row]
+        
+    
+    
 
     # DO NOT MODIFY BELOW THIS LINE
 
